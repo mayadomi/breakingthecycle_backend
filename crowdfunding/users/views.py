@@ -21,9 +21,10 @@ class CustomUserList(APIView):
 
 
 class CustomUserDetail(APIView):
+
     def get_object(self, pk):
         try:
-            return CustomUserDetail.objects.get(pk=pk)
+            return CustomUser.objects.get(pk=pk)
         except CustomUser.DoesNotExist:
             raise Http404
 
