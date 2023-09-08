@@ -13,6 +13,7 @@ class RiderList(APIView):
 
     def get(self, request):
         riders = Rider.objects.all()
+        
         serializer = RiderDeSerializer(riders, many=True)
         return Response(serializer.data)
     
@@ -21,6 +22,7 @@ class RiderList(APIView):
         serializer = RiderSerializer(data=request.data)
         
         if serializer.is_valid():
+            print(self.request.user.id)
             if Rider.objects.filter(rider_owner=self.request.user.id).exists():
                 return Response("A rider already exists for this account", status=status.HTTP_400_BAD_REQUEST)
             else:

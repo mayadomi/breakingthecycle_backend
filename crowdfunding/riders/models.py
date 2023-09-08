@@ -4,6 +4,11 @@ from django.contrib.auth import get_user_model
 
 
 class Rider(models.Model):
+
+    class KmsToDollar(models.IntegerChoices):
+        KM_1 = 1, '1km'
+        KM_2 = 2, '2km'
+        KM_5 = 5, '5km'
     
     rider_owner = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='user')
     team = models.CharField(max_length=200)
@@ -12,14 +17,28 @@ class Rider(models.Model):
     background_image = models.URLField()
     is_active = models.BooleanField()
     date_created = models.DateTimeField()
-    kms_goal = models.IntegerField()
-    # kms_ridden = models.IntegerField()
+    rate = models.PositiveIntegerField(choices=KmsToDollar.choices, default=KmsToDollar.KM_1, help_text="How may kms would you like to ride for each $ donated?")
+    kms_ceiling = models.IntegerField()
+
     @property
     def calc_kms_ridden(self):
-        rider_updates = RiderUpdates.objects.select_related('rider').all()
+        rider_updates = RiderUpdates.objects.select_related('rider')
+        print(self.rider_owner.user.id)
         total_kms = rider_updates.aggregate(s=Sum('kms_ridden'))["s"]
         return(total_kms)
-       
+    @property
+    def calc_amount_raised(self):
+        donations = Donation.objects.select_related('rider')
+        total_raised = donations.aggregate(s=Sum('amount'))["s"]
+        return(total_raised)
+    @property
+    def calc_kms_to_ride(self):
+        donations = Donation.objects.select_related('rider')
+        donation_kms = donations.aggregate(s=Sum('amount'))["s"]
+        print(Rider.objects.get().rate)
+        rate = Rider.objects.get().rate
+        kms_to_ride = rate * donation_kms
+        return(kms_to_ride)
 
 
 class RiderUpdates(models.Model):
