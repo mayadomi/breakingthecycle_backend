@@ -10,18 +10,23 @@ She Codes Plus crowdfunding project - DRF Backend.
 
 The concept for this was inspired by my experiences in cycling racing and observing the barriers that women often face in sport and in the community. One of the key races on the cycling calendar is a fundraising event to raise money and awareness about domestic violence, which touches the lives of so many, including women who cycle and race and is one of the biggest women's races on the calender in terms of participation.
 
+<img src="./readme_images/lifecycle.jpg" alt="generate token" width="200">
+<img src="./readme_images/lifecycle_2.jpg" alt="generate token" width="267">
+<img src="./readme_images/women_riding.jpeg" alt="generate token" width="256">
+
 Concurrently, women's participation in cycling and racing remains riddled with diffulty/barriers, like so many other male-dominated sports. Everything ranging from outright hostile/unwelcoming behaviour in races/rides to lack of recognition to vastly unequal prize money. 
 
-Yet cycling remains a key instrument to help women move autonomously, cheaply, improve fitness and wellbeing and is an amazing vehicle to bring women together for a common cause. 
+Yet cycling remains a key mechanism to help women move autonomously, freely, cheaply whilst improving fitness and wellbeing - and is an amazing vehicle to bring women together across spaces. 
 
-To that end, fundraising concept is a pivot on an existing model (Sisters of the Saddle: https://sistersofthesaddle.com/) to apply it to the race event.
+To that end, this fundraising concept is a pivot on an existing model (Sisters of the Saddle: https://sistersofthesaddle.com/) with an application to this key race event.
 
-The crowdfunding site will feature the event, and the dedicated domestic violence charities.
+The crowdfunding site will feature information about the event, and the dedicated domestic violence charities funds are being raised for and the target sum the event wants to raise for the charities.
 
-Women who sign up for the race get a 'rider' account created on the fundraising site, where they can set target amount to raise and target kms to train
-For each $ donated to a rider, they will train 1km in preparation for the race
+The premise for donations will be that for each dollar donated, the racing women will train x number of kilometers in preparation/solidarity and fitness acheivement goal.
 
-When certain collective kms thresholds are acheived in lead up to the event, the club behind the event runs sessions that the riders/women want eg:
+Women who sign up for the race get a 'rider' account created on the fundraising site, where they can set the target (or max) kms they want to ride, along with the rate per dollar they're willing to challenge themselves with.
+
+When certain collective kms thresholds are acheived in the lead up to the event, the club behind the event can run sessions that the riders/women want eg:
 - coached bike skills
 - coached racing skills
 - ride with an ex-professional woman racer
