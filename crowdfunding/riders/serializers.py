@@ -10,7 +10,7 @@ class DonationSerializer(serializers.ModelSerializer):
 
 class RiderUpdateSerializer(serializers.ModelSerializer):
 
-    rider = serializers.ReadOnlyField(source='rider_updates.id')
+    rider_posting = serializers.ReadOnlyField(source='updates.rider_posting')
 
     class Meta:
         model = apps.get_model('riders.RiderUpdates')
@@ -29,8 +29,9 @@ class RiderSerializer(serializers.ModelSerializer):
 class RiderDeSerializer(serializers.ModelSerializer):
         
     #kms_ridden = RiderUpdateSerializer(read_only=True, source='rider_updates', many=True)
-
-    kms_ridden = serializers.ReadOnlyField(source='calc_kms_ridden')
+    #kms_ridden = serializers.ReadOnlyField(source='calc_kms_ridden')
+    
+    #kms_ridden = serializers.ReadOnlyField(source='calc_kms_ridden')
     
     # @classmethod
     # def calc_kms_ridden(self, instance):
@@ -43,7 +44,7 @@ class RiderDeSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model('riders.Rider')      
 
-        fields = ('rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling','kms_ridden')
+        fields = ('rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling',)
 
         #'__all__'
     

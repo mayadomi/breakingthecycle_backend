@@ -19,18 +19,33 @@ class Rider(models.Model):
     date_created = models.DateTimeField()
     rate = models.PositiveIntegerField(choices=KmsToDollar.choices, default=KmsToDollar.KM_1, help_text="How may kms would you like to ride for each $ donated?")
     kms_ceiling = models.IntegerField()
-
+   
     @property
     def calc_kms_ridden(self):
-        rider_updates = RiderUpdates.objects.select_related('rider')
-        print(self.rider_owner.user.id)
-        total_kms = rider_updates.aggregate(s=Sum('kms_ridden'))["s"]
-        return(total_kms)
+        rider = Rider.objects.values('rider_owner').annotate()
+
+        rider_updates = RiderUpdates.objects.select_related('rider_posting').all()
+
+        kms = rider_updates.annotate(kms_ri=Sum('kms_ridden'))["kms_ri"]
+        print(kms)
+        
+        # rider_updates = RiderUpdates.objects.select_related('rider_posting').all()
+        
+        # for thing in rider_updates:
+        #     print(thing.description)
+       
+        # # for update in rider_updates:
+        # #     print(update.kms_ridden)
+        # #print(rider_updates)
+        # total_kms = rider_updates.aggregate(s=Sum('kms_ridden'))["s"]
+        return(kms)
+    
     @property
     def calc_amount_raised(self):
         donations = Donation.objects.select_related('rider')
         total_raised = donations.aggregate(s=Sum('amount'))["s"]
         return(total_raised)
+    
     @property
     def calc_kms_to_ride(self):
         donations = Donation.objects.select_related('rider')
@@ -42,7 +57,7 @@ class Rider(models.Model):
 
 
 class RiderUpdates(models.Model):
-    rider = models.ForeignKey('Rider', on_delete=models.CASCADE, related_name='rider_updates')
+    rider_posting = models.ForeignKey('Rider', on_delete=models.CASCADE, related_name='updates')
     kms_ridden = models.IntegerField(null=True)
     description = models.CharField(max_length=300)
     image = models.URLField()

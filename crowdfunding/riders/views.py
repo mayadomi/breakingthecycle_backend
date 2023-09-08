@@ -13,7 +13,7 @@ class RiderList(APIView):
 
     def get(self, request):
         riders = Rider.objects.all()
-        
+
         serializer = RiderDeSerializer(riders, many=True)
         return Response(serializer.data)
     
@@ -66,17 +66,29 @@ class RiderUpdatesList(APIView):
         permissions.IsAuthenticatedOrReadOnly,
         IsOwnerOrReadOnly
     ]
+
+    def get_object(self, pk):
+        try:
+            rider = Rider.objects.get(rider_owner=pk)
+            return rider
+        
+        except Rider.DoesNotExist:
+            raise Http404
+        
     def get(self, request):
         updates = RiderUpdates.objects.all()
         serializer = RiderUpdateSerializer(updates, many=True)
         return Response(serializer.data)
     
-    def post(self, request):
+    def post(self, request, pk):
+
         serializer = RiderUpdateSerializer(data=request.data)
         
+        rider = self.get_object(pk)
+
         if serializer.is_valid():
-            if RiderUpdates.rider == self.request.user.id:
-                serializer.save(rider=self.request.user.id)
+            if  rider.rider_owner.id == self.request.user.id:
+                serializer.save(rider_posting=rider)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response("Unauthorized, you must be the rider to post an update", status=status.HTTP_401_UNAUTHORIZED)
