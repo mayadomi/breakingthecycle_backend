@@ -69,7 +69,9 @@ class RiderUpdatesList(APIView):
 
     def get_object(self, pk):
         try:
-            rider = Rider.objects.get(rider_owner=pk)
+            rider = Rider.objects.get(pk=pk)
+            print(rider.rider_owner)
+            self.check_object_permissions(self.request, rider)
             return rider
         
         except Rider.DoesNotExist:
@@ -82,31 +84,33 @@ class RiderUpdatesList(APIView):
     
     def post(self, request, pk):
 
-        serializer = RiderUpdateSerializer(data=request.data)
-        
         rider = self.get_object(pk)
+        data = request.data
+        data['rider_posting'] = rider.pk
 
-        if serializer.is_valid():
-            if  rider.rider_owner.id == self.request.user.id:
-                serializer.save(rider_posting=rider)
+        serializer = RiderUpdateSerializer(data=data)     
+
+        if rider:
+            if serializer.is_valid():
+                serializer.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             else:
                 return Response("Unauthorized, you must be the rider to post an update", status=status.HTTP_401_UNAUTHORIZED)
-            
+        return Response("No such rider, you must be a rider to post an update", status=status.HTTP_401_UNAUTHORIZED)
 
 
 
 class DonationList(APIView):
+
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
     def get_object(self, pk):
         try:
             donation = Donation.objects.get(pk=pk)
-            #self.check_object_permissions(self.request, rider)
+            self.check_object_permissions(self.request, donation)
             return donation
         except Donation.DoesNotExist:
             raise Http404
-
 
     def get(self, request):
         donations = Donation.objects.all()
@@ -114,24 +118,18 @@ class DonationList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+       
         serializer = DonationSerializer(data=request.data)
+        
         if serializer.is_valid():
-            serializer.save(donor=request.user)
+            serializer.save(donor=self.request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         id = self.get_object(pk)
-
+              
         if id:
             Donation.objects.get(id=pk).delete()
             return Response(status.HTTP_204_NO_CONTENT)
         return Response(status.HTTP_404_NOT_FOUND)
-
-
-class DonationDeletionView(DestroyAPIView):
-    
-    queryset = Donation.objects.all()
-    serializer = DonationSerializer
-
-

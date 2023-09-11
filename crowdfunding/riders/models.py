@@ -54,7 +54,7 @@ class Donation(models.Model):
     amount = models.IntegerField()
     comment = models.CharField(max_length=200)
     anonymous = models.BooleanField()
-    rider = models.ForeignKey('Rider',
+    rider = models.ForeignKey(Rider,
                               on_delete=models.CASCADE,
                               related_name='donations')
     donor = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='donor')

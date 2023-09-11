@@ -29,15 +29,16 @@ class RiderSerializer(serializers.ModelSerializer):
         fields = '__all__'
         
 
-class RiderDeSerializer(serializers.ModelSerializer):   
+class RiderDeSerializer(serializers.ModelSerializer):  
 
+    rider = serializers.ReadOnlyField(source='id')
     kms_ridden = serializers.SerializerMethodField()
     kms_to_ride = serializers.SerializerMethodField()
     amount_donated = serializers.SerializerMethodField()
 
     class Meta:
         model = apps.get_model('riders.Rider')      
-        fields = ('rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling','kms_ridden','kms_to_ride', 'amount_donated')
+        fields = ('rider','rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling','kms_ridden','kms_to_ride', 'amount_donated')
 
     def get_kms_ridden(self, obj):
         rider_updates = apps.get_model('riders.RiderUpdates')
