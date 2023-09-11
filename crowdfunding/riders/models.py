@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Sum
+from django.db.models import OuterRef, Subquery
 from django.contrib.auth import get_user_model
+
 
 
 class Rider(models.Model):
@@ -20,44 +22,29 @@ class Rider(models.Model):
     rate = models.PositiveIntegerField(choices=KmsToDollar.choices, default=KmsToDollar.KM_1, help_text="How may kms would you like to ride for each $ donated?")
     kms_ceiling = models.IntegerField()
    
-    @property
-    def calc_kms_ridden(self):
-        rider = Rider.objects.values('rider_owner').annotate()
-
-        rider_updates = RiderUpdates.objects.select_related('rider_posting').all()
-
-        kms = rider_updates.annotate(kms_ri=Sum('kms_ridden'))["kms_ri"]
-        print(kms)
-        
-        # rider_updates = RiderUpdates.objects.select_related('rider_posting').all()
-        
-        # for thing in rider_updates:
-        #     print(thing.description)
-       
-        # # for update in rider_updates:
-        # #     print(update.kms_ridden)
-        # #print(rider_updates)
-        # total_kms = rider_updates.aggregate(s=Sum('kms_ridden'))["s"]
-        return(kms)
+    # @property
+    # def calc_kms_ridden(self):
+    #     total_kms_ridden = RiderUpdates.objects.aggregate(s=Sum('kms_ridden'))["s"]
+    #     return(total_kms_ridden)
     
-    @property
-    def calc_amount_raised(self):
-        donations = Donation.objects.select_related('rider')
-        total_raised = donations.aggregate(s=Sum('amount'))["s"]
-        return(total_raised)
+    # @property
+    # def calc_amount_raised(self):
+    #     donations = Donation.objects.select_related('rider')
+    #     total_raised = donations.aggregate(s=Sum('amount'))["s"]
+    #     return(total_raised)
     
-    @property
-    def calc_kms_to_ride(self):
-        donations = Donation.objects.select_related('rider')
-        donation_kms = donations.aggregate(s=Sum('amount'))["s"]
-        print(Rider.objects.get().rate)
-        rate = Rider.objects.get().rate
-        kms_to_ride = rate * donation_kms
-        return(kms_to_ride)
+    # @property
+    # def calc_kms_to_ride(self):
+    #     donations = Donation.objects.select_related('rider')
+    #     donation_kms = donations.aggregate(s=Sum('amount'))["s"]
+    #     print(Rider.objects.get().rate)
+    #     rate = Rider.objects.get().rate
+    #     kms_to_ride = rate * donation_kms
+    #     return(kms_to_ride)
 
 
 class RiderUpdates(models.Model):
-    rider_posting = models.ForeignKey('Rider', on_delete=models.CASCADE, related_name='updates')
+    rider_posting = models.ForeignKey(Rider, on_delete=models.CASCADE, related_name='updates')
     kms_ridden = models.IntegerField(null=True)
     description = models.CharField(max_length=300)
     image = models.URLField()

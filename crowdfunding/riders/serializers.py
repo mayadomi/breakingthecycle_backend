@@ -1,21 +1,23 @@
 from rest_framework import serializers
 from django.apps import apps
-from django.db.models import Sum
+
 
 class DonationSerializer(serializers.ModelSerializer):
+    
     donor = serializers.ReadOnlyField(source='donor.id')
+    
     class Meta:
         model = apps.get_model('riders.Donation')
         fields = '__all__'
 
+
 class RiderUpdateSerializer(serializers.ModelSerializer):
 
     rider_posting = serializers.ReadOnlyField(source='updates.rider_posting')
-
+    
     class Meta:
         model = apps.get_model('riders.RiderUpdates')
         fields = "__all__"
-
 
 
 class RiderSerializer(serializers.ModelSerializer):
@@ -25,29 +27,52 @@ class RiderSerializer(serializers.ModelSerializer):
     class Meta:
         model = apps.get_model('riders.Rider')
         fields = '__all__'
-
-class RiderDeSerializer(serializers.ModelSerializer):
         
-    #kms_ridden = RiderUpdateSerializer(read_only=True, source='rider_updates', many=True)
-    #kms_ridden = serializers.ReadOnlyField(source='calc_kms_ridden')
-    
-    #kms_ridden = serializers.ReadOnlyField(source='calc_kms_ridden')
-    
-    # @classmethod
-    # def calc_kms_ridden(self, instance):
-    #         print("its calcing")
-    #         rider_updates = apps.get_model('riders.RiderUpdates')
-    #         calcs = rider_updates.objects.get(rider=instance.rider_owner)
-    #         total_kms = calcs.aggregate(s=Sum('kms_ridden'))["s"]
-    #         return(total_kms)
-    
+
+class RiderDeSerializer(serializers.ModelSerializer):   
+
+    kms_ridden = serializers.SerializerMethodField()
+    kms_to_ride = serializers.SerializerMethodField()
+    amount_donated = serializers.SerializerMethodField()
+
     class Meta:
         model = apps.get_model('riders.Rider')      
+        fields = ('rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling','kms_ridden','kms_to_ride', 'amount_donated')
 
-        fields = ('rider_owner','team','bio','avatar_image','background_image','is_active','date_created','rate','kms_ceiling',)
+    def get_kms_ridden(self, obj):
+        rider_updates = apps.get_model('riders.RiderUpdates')
+        updates_to_sum = rider_updates.objects.filter(
+            rider_posting_id=obj.rider_owner_id
+            )
+        kms_ridden = 0
+        for update in updates_to_sum:
+            kms_ridden += update.kms_ridden
 
-        #'__all__'
-    
+        return(kms_ridden)
+
+    def get_kms_to_ride(self, obj):
+        rider_donations = apps.get_model('riders.Donation')
+        rate = obj.rate
+        donations_to_sum = rider_donations.objects.filter(
+            rider_id=obj.rider_owner_id
+        )
+        donation_sum = 0
+        for donation in donations_to_sum:
+            donation_sum += donation.amount
+
+        kms_to_ride = rate * donation_sum
+
+        return(kms_to_ride)
+        
+    def get_amount_donated(self, obj):
+        rider_donations = apps.get_model('riders.Donation')
+        donations_to_sum = rider_donations.objects.filter(
+            rider_id=obj.rider_owner_id
+        )
+        donation_sum = 0
+        for donation in donations_to_sum:
+            donation_sum += donation.amount
+        return(donation_sum)
     
 
 class RiderDetailSerializer(RiderSerializer):
