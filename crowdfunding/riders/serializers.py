@@ -5,6 +5,7 @@ from django.apps import apps
 class DonationSerializer(serializers.ModelSerializer):
 
     donor = serializers.ReadOnlyField(source='donor.id')
+    donor_name = serializers.ReadOnlyField(source='donor.first_name')
 
     class Meta:
         model = apps.get_model('riders.Donation')
