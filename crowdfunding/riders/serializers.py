@@ -32,10 +32,13 @@ class RiderSerializer(serializers.ModelSerializer):
     rider_id = serializers.ReadOnlyField(source='id')
     rider_user_id = serializers.ReadOnlyField(source='rider.id')
     rider_user_name = serializers.ReadOnlyField(source='rider.username')
+    rider_first_name = serializers.ReadOnlyField(source='rider.first_name')
+    rider_last_name = serializers.ReadOnlyField(source='rider.last_name')
+
 
     class Meta:
         model = apps.get_model('riders.Rider')      
-        fields = ('rider_id', 'rider_user_id', 'rider_user_name', 'team', 'bio', 'avatar_image', 'background_image', 'is_active', 'date_created', 'rate', 'kms_ceiling', 'kms_ridden', 'amount_donated', 'kms_to_ride')
+        fields = ('rider_id', 'rider_user_id', 'rider_user_name', 'rider_first_name', 'rider_last_name','team', 'bio', 'avatar_image', 'background_image', 'is_active', 'date_created', 'rate', 'kms_ceiling', 'kms_ridden', 'amount_donated', 'kms_to_ride')
 
 
 class RiderDetailSerializer(RiderSerializer):
@@ -45,6 +48,8 @@ class RiderDetailSerializer(RiderSerializer):
     rider_id = serializers.ReadOnlyField(source='id')
     rider_user_id = serializers.ReadOnlyField(source='rider.id')
     rider_user_name = serializers.ReadOnlyField(source='rider.username')
+    rider_first_name = serializers.ReadOnlyField(source='rider.first_name')
+    rider_last_name = serializers.ReadOnlyField(source='rider.last_name')
 
     def update(self, instance, validated_data):
         instance.rider = validated_data.get('rider', instance.rider)
@@ -61,5 +66,5 @@ class RiderDetailSerializer(RiderSerializer):
     
     class Meta:
         model = apps.get_model('riders.Rider')
-        fields = fields = ('rider_id', 'rider_user_id', 'rider_user_name', 'team', 'bio', 'avatar_image', 'background_image', 'is_active', 'date_created', 'rate', 'kms_ceiling', 'kms_ridden', 'amount_donated', 'kms_to_ride', 'donations', 'updates')
+        fields = fields = ('rider_id', 'rider_user_id', 'rider_user_name', 'rider_first_name', 'rider_last_name', 'team', 'bio', 'avatar_image', 'background_image', 'is_active', 'date_created', 'rate', 'kms_ceiling', 'kms_ridden', 'amount_donated', 'kms_to_ride', 'donations', 'updates')
     
