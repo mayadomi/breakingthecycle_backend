@@ -4,13 +4,21 @@ from django.apps import apps
 
 class DonationSerializer(serializers.ModelSerializer):
 
-    donor = serializers.ReadOnlyField(source='donor.id')
-    donor_name = serializers.ReadOnlyField(source='donor.first_name')
+    #donor = serializers.ReadOnlyField(source='donor.id')
+    donor_first_name = serializers.SerializerMethodField() #serializers.ReadOnlyField(source='donor.first_name')
+    rider_first_name = serializers.ReadOnlyField(source='rider.rider.first_name')
+    rider_last_name = serializers.ReadOnlyField(source='rider.rider.last_name')
 
     class Meta:
         model = apps.get_model('riders.Donation')
-        fields = '__all__'
+        fields = ('id', 'amount', 'comment', 'anonymous', 'rider', 'donor_first_name', 'rider_first_name', 'rider_last_name')
 
+    def get_donor_first_name(self, obj):
+        if (obj.anonymous) is True:
+            return('Anonymous')
+        else:
+            return obj.donor.first_name
+         
 
 class RiderUpdateSerializer(serializers.ModelSerializer):
     
