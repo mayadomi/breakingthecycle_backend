@@ -1,9 +1,9 @@
-# fly.toml app configuration file generated for breakingthecycle on 2023-09-12T18:49:46+10:00
+# fly.toml app configuration file generated for breakingthecycle-backend on 2023-09-14T10:43:51+10:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "breakingthecycle"
+app = "breakingthecycle-backend"
 primary_region = "syd"
 console_command = "/code/manage.py shell"
 kill_signal = "SIGINT"
