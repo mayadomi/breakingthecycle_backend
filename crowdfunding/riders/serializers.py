@@ -11,7 +11,7 @@ class DonationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = apps.get_model('riders.Donation')
-        fields = ('id', 'amount', 'comment', 'anonymous', 'rider', 'donor_first_name', 'rider_first_name', 'rider_last_name')
+        fields = ('id', 'amount', 'comment', 'anonymous', 'date_donated', 'rider', 'donor_first_name', 'rider_first_name', 'rider_last_name')
 
     def get_donor_first_name(self, obj):
         if (obj.anonymous) is True:

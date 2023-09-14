@@ -53,4 +53,5 @@ class Donation(models.Model):
                               on_delete=models.CASCADE,
                               related_name='donations')
     donor = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, related_name='donor')
+    date_donated = models.DateTimeField(default=timezone.now)
 
