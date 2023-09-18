@@ -3,6 +3,9 @@ from .models import CustomUser
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+
+    rider = serializers.ReadOnlyField(source='user.id')
+    
     class Meta:
         model = CustomUser
         fields = '__all__'
@@ -18,3 +21,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.is_active = validated_data.get('is_active', instance.is_active)
         instance.save()
         return instance
+    
