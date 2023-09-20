@@ -1,10 +1,19 @@
 from rest_framework import serializers
 from .models import CustomUser
+from django.apps import apps
+
+class CustomUserDonationSerializer(serializers.ModelSerializer):
+    donation = serializers.RelatedField(read_only=True)
+
+    class Meta:
+        model=apps.get_model('riders.Donation')
+        fields = '__all__'
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
 
     rider = serializers.ReadOnlyField(source='user.id')
+    donations = CustomUserDonationSerializer(many=True, read_only=True, source='donor')
     
     class Meta:
         model = CustomUser
@@ -22,3 +31,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
         instance.save()
         return instance
     
+
