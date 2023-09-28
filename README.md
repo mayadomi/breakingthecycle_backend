@@ -4,17 +4,25 @@ by Maya Dominice
 
 She Codes Plus crowdfunding project - DRF Backend.
 
+
+## Deployment
+
+Deployed on [Fly.io](https://fly.io/) and endpoint available here:
+https://breakingthecycle-backend.fly.dev/
+
 ## Planning
 
 ### Concept/Name
 
 The concept for this was inspired by my experiences in cycling racing and observing the barriers that women often face in sport and in the community. One of the key races on the cycling calendar is a fundraising event to raise money and awareness about domestic violence, which touches the lives of so many, including women who cycle and race and is one of the biggest women's races on the calender in terms of participation.
 
+<p align="center">
 <img src="./readme_images/lifecycle.jpg" alt="generate token" width="200">
 <img src="./readme_images/lifecycle_2.jpg" alt="generate token" width="267">
 <img src="./readme_images/women_riding.jpeg" alt="generate token" width="256">
+</p>
 
-Concurrently, women's participation in cycling and racing remains riddled with diffulty/barriers, like so many other male-dominated sports. Everything ranging from outright hostile/unwelcoming behaviour in races/rides to lack of recognition to vastly unequal prize money. 
+Currently, women's participation in cycling and racing remains riddled with diffulty/barriers, like so many other male-dominated sports. Everything ranging from outright hostile/unwelcoming behaviour in races/rides to lack of recognition to vastly unequal prize money. 
 
 Yet cycling remains a key mechanism to help women move autonomously, freely, cheaply whilst improving fitness and wellbeing - and is an amazing vehicle to bring women together across spaces. 
 
